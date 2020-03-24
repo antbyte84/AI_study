@@ -1,0 +1,15 @@
+1.sudo vi /etc/postgresql/9.5/main/pg_hba.conf
+host all all 127.0.0.1/32 md5
+=> host all all 127.0.0.1/32 trust
+2.sudo /etc/init.d/postgresql restart
+3.vi endpoints.yml
+  tracker_store:
+    store_type: SQL
+    url: localhost
+    db: rasa
+    dialect: "postgres"
+    username: "postgres"
+    login_db: postgres
+4.rasa run --endpoints endpoints.yml --credentials credentials.yml --connector rest --cors "*"
+5.psql -h 127.0.0.1 -U postgres -d postgres -p 5432
+alter user postgres with password 'xxxxxx';
