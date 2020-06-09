@@ -1,0 +1,138 @@
+Rasa训练数据
+1. JSON格式
+{
+    "rasa_nlu_data": {
+        "common_examples": [],  //样本集
+        "regex_features" : [],  //正则表达式
+        "lookup_tables"  : [],  //自定义词表
+        "entity_synonyms": []   //同义词
+    }
+}
+
+For example:
+a.样本集（common_examples）
+{
+  "text": "show me chinese restaurants",
+  "intent": "restaurant_search",
+  "entities": [
+    {
+      "start": 8,
+      "end": 15,
+      "value": "chinese",
+      "entity": "cuisine"
+    }
+  ]
+}
+
+text是字符串，必需；
+intent是字符串，可选；
+entities是列表，可选。
+
+b.同义词（Entity Synonyms）
+普通数据标注方式
+[
+  {
+    "text": "in the center of NYC",
+    "intent": "search",
+    "entities": [
+      {
+        "start": 17,
+        "end": 20,
+        "value": "New York City",
+        "entity": "city"
+      }
+    ]
+  },
+  {
+    "text": "in the centre of New York City",
+    "intent": "search",
+    "entities": [
+      {
+        "start": 17,
+        "end": 30,
+        "value": "New York City",
+        "entity": "city"
+      }
+    ]
+  }
+]
+
+整合方式
+{
+  "rasa_nlu_data": {
+    "entity_synonyms": [
+      {
+        "value": "New York City",
+        "synonyms": ["NYC", "nyc", "the big apple"]
+      }
+    ]
+  }
+}
+
+c.正则表达式（Regular Expression Features）
+{
+    "rasa_nlu_data": {
+        "regex_features": [
+            {
+                "name": "zipcode",
+                "pattern": "[0-9]{5}"
+            },
+            {
+                "name": "greet",
+                "pattern": "hey[^\\s]*"
+            },
+        ]
+    }
+}
+正则表达式只是一个辅助功能，并不定义实体或意图，仍然需要在训练数据集中定义实体或意图。
+
+d.自定义词表（Lookup Tables）
+文件形式：
+{
+    "rasa_nlu_data": {
+        "lookup_tables": [
+            {
+                "name": "plates",
+                "elements": "data/test/lookup_tables/plates.txt"
+            }
+        ]
+    }
+}
+
+列表形式：
+{
+    "rasa_nlu_data": {
+        "lookup_tables": [
+            {
+                "name": "plates",
+                "elements": ["beans", "rice", "tacos", "cheese"]
+            }
+        ]
+    }
+}
+训练数据中需要有一些自定义词表中词的例子，自定义词表才会生效，否则模型不会使用自定义词表。
+
+2. md格式
+数据格式
+## intent:意图名称
+- aaa[实体词1](实体类别1)ccc[实体词2](实体类别2)eeee
+
+## lookup:自定义词类别
+- 自定义词1
+- 自定义词2
+
+训练数据存储方式
+训练数据可以放在一个文件或多个文件中，训练数据的目录为nlu_data：
+    nlu_data/
+    ├── aaaa.md
+    ├── bbbb.md
+
+训练时需要参数
+rasa train --data nlu_data
+
+
+
+
+
+
+

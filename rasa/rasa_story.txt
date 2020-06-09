@@ -1,0 +1,26 @@
+## story xxxx : 1 
+* greet
+ - utter_greet
+* 意图1
+ - utter_xxxxxxxx
+* 意图1{"实体1":"value1"}
+ - utter_xxxxxxxx
+* 意图2{"实体2":"value2"}
+ - slot{"实体2": "value2"}
+ - action_xxxxxx
+* goodbye
+ - utter_goodbye
+
+## story maintenance inquire test: 2
+* greet
+ - utter_greet
+* 意图1{"实体1":"value1"}
+ - action_xxxxxxx
+* goodbye
+ - utter_goodbye
+
+
+注意:使用action时需要启动rasa action命令
+
+对于domain.yml,其中
+entities的内容要与训练数据中标注的实体种类一致
